@@ -25,8 +25,10 @@ if [[ ! -f "${IMAGES_LIST}" ]]; then
   exit 1
 fi
 
-echo "Starting at $(date)"
-echo "Processing images list $IMAGES_LIST"
+JOURNAL_DIR=${JOURNAL_DIR:-$DIR/journal/$(date "+%Y-%m-%d_%H%M%S")}
+mkdir -p $JOURNAL_DIR 
+DONE_FILE=$JOURNAL_DIR/done
+ERRORS_FILE=$JOURNAL_DIR/errors
 
 if [[ -n "${DRY_RUN}" ]]; then
   echo "DRY_RUN MODE"
@@ -35,6 +37,15 @@ else
   DOCKER="docker"
 fi
 
+echo "Starting at $(date)"
+echo "
+IMAGES_LIST=$IMAGES_LIST
+JOURNAL_DIR = $JOURNAL_DIR
+DONE_DIR = $DONE_DIR
+"
+
+DONE_COUNT=0
+ERROR_COUNT=0
 # there are 3 types of image names:
 # 1. non-codefresh like "bitnami/mongo:123" - convert to "private-registry-addr/bitnami/mongo:123"
 # 2. codefresh public images like "codefresh/engine:123" - convert to "private-registry-addr/codefresh/mongo:123"
@@ -58,8 +69,17 @@ do
 
   if [[ $? == 0 ]]; then
     echo "$PUSH" >> $DONE_FILE
+    (( DONE_COUNT++ ))
   else
-    echo "ERROR - $PULL to $PUSH"
+    echo "ERROR - $PULL to $PUSH" >> $ERRORS_FILE
+    (( ERROR_COUNT++ ))
   fi
-  
+
 done
+
+echo "Completed at $(date) "
+echo "Done $DONE_COUNT images - see $DONE_FILE "
+if [[ ERROR_COUNT -gt 0 ]]; then
+  echo "There are $ERROR_COUNT error - see $ERRORS_FILE "
+fi
+
