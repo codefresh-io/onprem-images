@@ -54,7 +54,7 @@ DELIMITER='codefresh/'
 cat ${IMAGES_LIST} | while read line
 do
   PULL_IMAGE=$line
-  PUSH_NAME=$(echo $PULL_IMAGE | awk -F"${DELIMITER}" -vPRIVATE_REGISTRY_ADDR=${PRIVATE_REGISTRY_ADDR} \
+  PUSH_IMAGE=$(echo $PULL_IMAGE | awk -F"${DELIMITER}" -vPRIVATE_REGISTRY_ADDR=${PRIVATE_REGISTRY_ADDR} \
       '{if($2 == ""){print PRIVATE_REGISTRY_ADDR"/"$1}  else {print PRIVATE_REGISTRY_ADDR"/codefresh/"$2}}')
   echo "$PULL_IMAGE    ->    $PUSH_NAME "
 
