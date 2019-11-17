@@ -80,7 +80,7 @@ done
 
 echo "Completed at $(date) "
 echo "Done $DONE_COUNT images - see $DONE_FILE "
-if [[ ERROR_COUNT -gt 0 ]]; then
+if [[ ${ERROR_COUNT} -gt 0 ]]; then
   echo "There are $ERROR_COUNT error - see $ERRORS_FILE "
 fi
 
