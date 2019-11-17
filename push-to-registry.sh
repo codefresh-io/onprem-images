@@ -68,10 +68,10 @@ do
   eval $PUSH_COMMAND && echo -e "Push $PUSH_IMAGE completed - $(date) !!!\n"
 
   if [[ $? == 0 ]]; then
-    echo "$PUSH" >> $DONE_FILE
+    echo "$PUSH_IMAGE" >> $DONE_FILE
     (( DONE_COUNT++ ))
   else
-    echo "ERROR - $PULL to $PUSH" >> $ERRORS_FILE
+    echo "ERROR - $PULL_IMAGE to $PUSH_IMAGE" >> $ERRORS_FILE
     (( ERROR_COUNT++ ))
   fi
 
