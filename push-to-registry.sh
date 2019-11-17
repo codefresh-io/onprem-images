@@ -59,7 +59,7 @@ do
   echo "$PULL_IMAGE    ->    $PUSH_NAME "
 
   PULL_COMMAND="$DOCKER pull $PULL_IMAGE"
-  TAG_COMMAND="$DOCKER tag $PULL $PUSH_IMAGE"
+  TAG_COMMAND="$DOCKER tag $PULL_IMAGE $PUSH_IMAGE"
   PUSH_COMMAND="$DOCKER push $PUSH_IMAGE"
 
   echo "---------- Migrate $PULL to $PUSH"
