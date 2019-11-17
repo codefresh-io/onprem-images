@@ -1,4 +1,7 @@
-# Images for Codefresh Onpremises intallations
+# Images for Codefresh Onpremises installation
+
+## Push images from Codefresh Enterprise and public repos to private repo 
+Use Case: install in non-internet environments for private repo
 
 ### Prerequesites:
 setup docker and `docker login to both source and destination registries`
