@@ -57,13 +57,13 @@ do
   PULL_IMAGE=$line
   PUSH_IMAGE=$(echo $PULL_IMAGE | awk -F"${DELIMITER}" -vPRIVATE_REGISTRY_ADDR=${PRIVATE_REGISTRY_ADDR} \
       '{if($2 == ""){print PRIVATE_REGISTRY_ADDR"/"$1}  else {print PRIVATE_REGISTRY_ADDR"/codefresh/"$2}}')
-  echo "$PULL_IMAGE    ->    $PUSH_NAME "
+  echo "$PULL_IMAGE    ->    $PUSH_IMAGE "
 
   PULL_COMMAND="$DOCKER pull $PULL_IMAGE"
   TAG_COMMAND="$DOCKER tag $PULL_IMAGE $PUSH_IMAGE"
   PUSH_COMMAND="$DOCKER push $PUSH_IMAGE"
 
-  echo "---------- Migrate $PULL to $PUSH"
+  echo "---------- Migrate $PULL_IMAGE to $PUSH_IMAGE"
   eval $PULL_COMMAND && echo -e "Pull $PULL_IMAGE completed - $(date) !!!\n" && \
   eval $TAG_COMMAND && echo -e "Tag $PUSH_IMAGE completed - $(date) !!!\n" && \
   eval $PUSH_COMMAND && echo -e "Push $PUSH_IMAGE completed - $(date) !!!\n"
