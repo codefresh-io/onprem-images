@@ -51,7 +51,7 @@ ERROR_COUNT=0
 # 2. codefresh public images like "codefresh/engine:123" - convert to "private-registry-addr/codefresh/mongo:123"
 # 3. codefresh private images like gcr.io/codefresh-enterprise/codefresh/cf-api:cf-onprem-v1.0.86 - will be convert to "private-registry-addr/codefresh/mongo:123
 DELIMITER='codefresh/'
-cat ${IMAGES_LIST} | while read line
+while read line
 do
   [[ -z $line ]] && continue
   PULL_IMAGE=$line
@@ -76,7 +76,7 @@ do
     ERROR_COUNT=$(( ERROR_COUNT+1 ))
   fi
 
-done
+done < $IMAGES_LIST
 
 echo "Completed at $(date) "
 echo "Done $DONE_COUNT images - see $DONE_FILE "
