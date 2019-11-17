@@ -70,10 +70,10 @@ do
 
   if [[ $? == 0 ]]; then
     echo "$PUSH_IMAGE" >> $DONE_FILE
-    (( DONE_COUNT++ ))
+    DONE_COUNT=$(( DONE_COUNT+1 ))
   else
     echo "ERROR - $PULL_IMAGE to $PUSH_IMAGE" >> $ERRORS_FILE
-    (( ERROR_COUNT++ ))
+    ERROR_COUNT=$(( ERROR_COUNT+1 ))
   fi
 
 done
