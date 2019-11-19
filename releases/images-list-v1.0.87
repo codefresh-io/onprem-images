@@ -20,7 +20,7 @@ gcr.io/codefresh-enterprise/codefresh/cronus:cf-onprem-v1.0.87
 gcr.io/codefresh-enterprise/codefresh/hermes:cf-onprem-v1.0.87
 gcr.io/codefresh-enterprise/codefresh/nomios:cf-onprem-v1.0.87
 gcr.io/codefresh-enterprise/codefresh/cf-broadcaster:cf-onprem-v1.0.87
-gcr.io/codefresh-enterprise/codefresh/cf-api:cf-onprem-v1.0.87-2
+gcr.io/codefresh-enterprise/codefresh/cf-api:cf-onprem-v1.0.87
 gcr.io/codefresh-enterprise/codefresh/cf-tls-sign:cf-onprem-v1.0.87
 gcr.io/codefresh-enterprise/codefresh/cf-ui:cf-onprem-v1.0.87
 gcr.io/codefresh-enterprise/codefresh/charts-manager:cf-onprem-v1.0.87
