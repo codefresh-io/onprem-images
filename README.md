@@ -15,3 +15,8 @@ docker login -u _json_key -p "$(cat sa.json)" https://gcr.io
 ```
 push-to-registry.sh <private-registry-addr> <release-name>
 ```
+
+Example:
+```
+push-to-registry.sh os-registry.cf-cd.com:5000 v1.0.90
+```
