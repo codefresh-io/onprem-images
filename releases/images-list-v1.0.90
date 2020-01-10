@@ -39,3 +39,5 @@ codefresh/cf-docker-puller:cf-onprem-v1.0.90
 codefresh/cf-docker-builder:cf-onprem-v1.0.90
 codefresh/cf-container-logger:cf-onprem-v1.0.90
 codefresh/cf-git-cloner:cf-onprem-v1.0.90
+
+codefresh/cf-api:fix_offline
