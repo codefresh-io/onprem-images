@@ -4,7 +4,7 @@
 ##### Obtain sslcerts for os-registry.cf-cd.com + os-registry-pub.cf-cd.com  
 for letsencypt:  
 ```
-certbot certonly --dns-route53 -d onhack-eks-1.cf-cd.com --work-dir . --logs-dir /tmp/ --config-dir .
+certbot certonly --dns-route53 -d os-registry.cf-cd.com --work-dir . --logs-dir /tmp/ --config-dir .
 ```
 copy the certrificates to ssl/ folder
 

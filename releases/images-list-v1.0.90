@@ -42,5 +42,10 @@ codefresh/cf-git-cloner:cf-onprem-v1.0.90
 
 gcr.io/codefresh-enterprise/codefresh/cf-api:13.18.1-fix-offline
 
+alpine:latest
+ubuntu:latest
+
+
+
 
 
