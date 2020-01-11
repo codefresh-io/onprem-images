@@ -40,5 +40,7 @@ codefresh/cf-docker-builder:cf-onprem-v1.0.90
 codefresh/cf-container-logger:cf-onprem-v1.0.90
 codefresh/cf-git-cloner:cf-onprem-v1.0.90
 
-gcr.io/codefresh-inc/codefresh/cf-api:13.16.3-fix-offline
+gcr.io/codefresh-enterprise/codefresh/cf-api:13.18.1-fix-offline
+
+
 
