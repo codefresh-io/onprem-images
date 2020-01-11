@@ -43,7 +43,6 @@ codefresh/cf-git-cloner:cf-onprem-v1.0.90
 codefresh/cf-docker-pusher:v5-sp1
 codefresh/cf-docker-pusher:v5
 codefresh/cf-docker-tag-pusher
-codefresh/cf-docker-tag-pusher:
 codefresh/cf-docker-puller:v7
 codefresh/cf-docker-puller:v7-sp1
 codefresh/cf-docker-builder:v16
