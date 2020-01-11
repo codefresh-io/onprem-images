@@ -43,6 +43,7 @@ codefresh/cf-git-cloner:cf-onprem-v1.0.90
 codefresh/cf-docker-pusher:v5-sp1
 codefresh/cf-docker-pusher:v5
 codefresh/cf-docker-tag-pusher
+codefresh/cf-docker-tag-pusher:
 codefresh/cf-docker-puller:v7
 codefresh/cf-docker-puller:v7-sp1
 codefresh/cf-docker-builder:v16
@@ -54,6 +55,7 @@ codefresh/compose:1.25.0-sp
 codefresh/cf-deploy-kubernetes:sp-1
 codefresh/cf-deploy-kubernetes
 codefresh/dind:18.09.5-v24
+codefresh/pikolo:latest
 
 gcr.io/codefresh-enterprise/codefresh/cf-api:13.18.1-fix-offline
 
