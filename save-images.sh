@@ -50,7 +50,7 @@ do
 done < $IMAGES_LIST
 
 echo "Save List = $SAVE_LIST"
-$DOCKER save -o $SAVE_FILE $IMAGES_LIST 
+$DOCKER save -o $SAVE_FILE $SAVE_LIST 
 
 echo "Completed at $(date) "
 
