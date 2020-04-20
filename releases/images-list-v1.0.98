@@ -3,6 +3,8 @@ codefresh/curl:latest
 codefresh/cf-runtime-cleaner:latest
 codefresh/generate-certs:latest
 codefresh/cli:latest
+codefresh/agent:stable
+gcr.io/codefresh-enterprise/codefresh/cf-k8s-monitor:4.6.3
 codefresh/fs-ops:latest
 docker:18.09-dind
 consul:1.0.0
