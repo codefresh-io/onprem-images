@@ -36,7 +36,7 @@ gcr.io/codefresh-enterprise/codefresh/pipeline-manager:cf-onprem-v1.0.99
 gcr.io/codefresh-enterprise/codefresh/runtime-environment-manager:cf-onprem-v1.0.99
 gcr.io/codefresh-enterprise/codefresh/tasker-kubernetes:cf-onprem-v1.0.99
 
-codefresh/engine:1.107.0
+codefresh/engine:1.105.0
 codefresh/engine:cf-onprem-v1.0.93-http
 codefresh/cf-docker-pusher:cf-onprem-v1.0.99
 codefresh/cf-docker-puller:cf-onprem-v1.0.99
