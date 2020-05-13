@@ -61,3 +61,4 @@ codefresh/pikolo:latest
 
 alpine:latest
 ubuntu:latest
+codefresh/kube-helm:3.0.3
