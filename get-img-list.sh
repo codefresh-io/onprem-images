@@ -2,9 +2,9 @@
 
 set -eu
 
-REPO_CHANNEL=${REPO_CHANNEL:-dev}
+REPO_CHANNEL=${REPO_CHANNEL:-$1}
 CHART=codefresh-onprem-${REPO_CHANNEL}/codefresh
-ONPREM_VERSION=${ONPREM_VERSION:-"1.0.104"}
+ONPREM_VERSION=${ONPREM_VERSION:-$2}
 
 HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
 
