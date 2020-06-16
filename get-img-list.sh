@@ -2,9 +2,9 @@
 
 set -eu
 
-REPO_CHANNEL=${REPO_CHANNEL:-test}
+REPO_CHANNEL=${REPO_CHANNEL:-dev}
 CHART=codefresh-onprem-${REPO_CHANNEL}/codefresh
-ONPREM_VERSION=${ONPREM_VERSION:-1.0.104}
+ONPREM_VERSION=${ONPREM_VERSION:-"1.0.104"}
 
 HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
 
@@ -22,21 +22,45 @@ function getRuntimeImages() {
         DOCKER_BUILDER_IMAGE
         GIT_CLONE_IMAGE
         COMPOSE_IMAGE
+        KUBE_DEPLOY
+        FS_OPS_IMAGE
     )
 
     for k in ${RUNTIME_IMAGES[@]}; do
         helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
     done
+    
+    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
+    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'dindImage'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
+}
 
-    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'engine:' | tr -d '"' | awk -F 'image: ' '{print $2}' | tr -d ',' | sort -u
+# default images listed here:
+# https://github.com/codefresh-io/engine/blob/d2f59647be8d4e76b6c195b2d5f71cbbf8ce0094/src/server/config/environment/kubernetes.js#L95-L107
+function getDefaultEngineImages() {
+    DEFAULT_ENGINE_IMAGES=(
+        codefresh/cf-docker-pusher:v5
+        codefresh/cf-docker-puller:v7
+        codefresh/cf-docker-tag-pusher:v2
+        codefresh/cf-docker-builder:v16
+        codefresh/cf-gc-builder:0.4.0
+        codefresh/cf-container-logger:1.4.2
+        codefresh/cf-git-cloner:10.0.1
+        docker/compose:1.11.2
+        codefresh/cf-deploy-kubernetes:latest
+        codefresh/fs-ops:latest
+        codefresh/pikolo:latest
+        codefresh/cf-debugger:1.1.2
+    )
+
+    for i in ${DEFAULT_ENGINE_IMAGES[@]}; do
+        echo $i
+    done
 }
 
 function getOtherImages() {
     
     OTHER_IMAGES=(
-        codefresh/dind:18.09.5-v24
         codefresh/pikolo:latest
-        codefresh/cf-deploy-kubernetes
         codefresh/cf-runtime-cleaner:latest
         codefresh/cli:latest
         codefresh/agent:stable
@@ -44,11 +68,6 @@ function getOtherImages() {
         alpine:latest
         ubuntu:latest
         codefresh/kube-helm:3.0.3
-        codefresh/cf-docker-builder:v16
-        codefresh/cf-docker-puller:v7
-        codefresh/cf-docker-pusher:v5
-        codefresh/fs-ops:latest
-        codefresh/cf-container-logger:0.0.36
     )
 
     for i in ${OTHER_IMAGES[@]}; do
@@ -59,10 +78,12 @@ function getOtherImages() {
 function getImages() {
     getHelmReleaseImages
     getRuntimeImages
+    getDefaultEngineImages
     getOtherImages
 }
 
 LOCAL_CHART_PATH=$(mktemp -d)
+helm repo add codefresh-onprem-${REPO_CHANNEL} http://charts.codefresh.io/${REPO_CHANNEL}
 helm fetch ${CHART} --version ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH}
 
 getImages | sort -u
