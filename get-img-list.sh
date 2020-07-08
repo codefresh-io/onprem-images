@@ -83,7 +83,7 @@ function getImages() {
 }
 
 LOCAL_CHART_PATH=$(mktemp -d)
-helm repo add codefresh-onprem-${REPO_CHANNEL} http://charts.codefresh.io/${REPO_CHANNEL}
+helm repo add codefresh-onprem-${REPO_CHANNEL} http://charts.codefresh.io/${REPO_CHANNEL} &>/dev/null
 helm fetch ${CHART} --version ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH}
 
 getImages | sort -u
