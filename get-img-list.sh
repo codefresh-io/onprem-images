@@ -68,6 +68,7 @@ function getOtherImages() {
         alpine:latest
         ubuntu:latest
         codefresh/kube-helm:3.0.3
+        codefresh/hermes-store-backup:0.2.0
     )
 
     for i in ${OTHER_IMAGES[@]}; do
