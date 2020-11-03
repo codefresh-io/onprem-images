@@ -38,18 +38,18 @@ function getRuntimeImages() {
 # https://github.com/codefresh-io/engine/blob/d2f59647be8d4e76b6c195b2d5f71cbbf8ce0094/src/server/config/environment/kubernetes.js#L95-L107
 function getDefaultEngineImages() {
     DEFAULT_ENGINE_IMAGES=(
-        codefresh/cf-docker-pusher:v5
-        codefresh/cf-docker-puller:v7
-        codefresh/cf-docker-tag-pusher:v2
-        codefresh/cf-docker-builder:v16
-        codefresh/cf-gc-builder:0.4.0
-        codefresh/cf-container-logger:1.4.2
-        codefresh/cf-git-cloner:10.0.1
-        docker/compose:1.11.2
-        codefresh/cf-deploy-kubernetes:latest
-        codefresh/fs-ops:latest
-        codefresh/pikolo:latest
-        codefresh/cf-debugger:1.1.2
+        quay.io/codefresh/cf-docker-pusher:v5
+        quay.io/codefresh/cf-docker-puller:v7
+        quay.io/codefresh/cf-docker-tag-pusher:v2
+        quay.io/codefresh/cf-docker-builder:v16
+        quay.io/codefresh/cf-gc-builder:0.4.0
+        quay.io/codefresh/cf-container-logger:1.4.2
+        quay.io/codefresh/cf-git-cloner:10.0.1
+        quay.io/codefresh/compose:latest
+        quay.io/codefresh/cf-deploy-kubernetes:latest
+        quay.io/codefresh/fs-ops:latest
+        quay.io/codefresh/pikolo:latest
+        quay.io/codefresh/cf-debugger:1.1.2
     )
 
     for i in ${DEFAULT_ENGINE_IMAGES[@]}; do
