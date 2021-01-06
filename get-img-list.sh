@@ -24,6 +24,8 @@ function getRuntimeImages() {
         COMPOSE_IMAGE
         KUBE_DEPLOY
         FS_OPS_IMAGE
+        TEMPLATE_ENGINE
+        PIPELINE_DEBUGGER_IMAGE
     )
 
     for k in ${RUNTIME_IMAGES[@]}; do
@@ -31,44 +33,17 @@ function getRuntimeImages() {
     done
     
     helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
-    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'dindImage'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
-}
-
-# default images listed here:
-# https://github.com/codefresh-io/engine/blob/d2f59647be8d4e76b6c195b2d5f71cbbf8ce0094/src/server/config/environment/kubernetes.js#L95-L107
-function getDefaultEngineImages() {
-    DEFAULT_ENGINE_IMAGES=(
-        quay.io/codefresh/cf-docker-pusher:v5
-        quay.io/codefresh/cf-docker-puller:v7
-        quay.io/codefresh/cf-docker-tag-pusher:v2
-        quay.io/codefresh/cf-docker-builder:v16
-        quay.io/codefresh/cf-gc-builder:0.4.0
-        quay.io/codefresh/cf-container-logger:1.4.2
-        quay.io/codefresh/cf-git-cloner:10.0.1
-        quay.io/codefresh/compose:latest
-        quay.io/codefresh/cf-deploy-kubernetes:latest
-        quay.io/codefresh/fs-ops:latest
-        quay.io/codefresh/pikolo:latest
-        quay.io/codefresh/cf-debugger:1.1.2
-    )
-
-    for i in ${DEFAULT_ENGINE_IMAGES[@]}; do
-        echo $i
-    done
+    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep '"dindImage"'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
 }
 
 function getOtherImages() {
     
     OTHER_IMAGES=(
-        codefresh/pikolo:latest
-        codefresh/cf-runtime-cleaner:latest
-        codefresh/cli:latest
-        codefresh/agent:stable
+        quay.io/codefresh/cf-runtime-cleaner:1.2.0
+        quay.io/codefresh/agent:stable
         gcr.io/codefresh-enterprise/codefresh/cf-k8s-monitor:4.6.3
-        alpine:latest
-        ubuntu:latest
-        codefresh/kube-helm:3.0.3
-        codefresh/hermes-store-backup:0.2.0
+        quay.io/codefresh/kube-helm:3.0.3
+        quay.io/codefresh/hermes-store-backup:0.2.0
     )
 
     for i in ${OTHER_IMAGES[@]}; do
@@ -79,7 +54,6 @@ function getOtherImages() {
 function getImages() {
     getHelmReleaseImages
     getRuntimeImages
-    getDefaultEngineImages
     getOtherImages
 }
 
