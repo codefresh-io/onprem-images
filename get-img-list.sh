@@ -1,27 +1,15 @@
 #!/bin/bash
 
-set -e
+set -eu
 
-if [[ -z "${LOCAL_CHART_PATH}" ]]; then
-    REPO_CHANNEL=${REPO_CHANNEL:-$1}
-    CHART=codefresh-onprem-${REPO_CHANNEL}/codefresh
-    ONPREM_VERSION=${ONPREM_VERSION:-$2}
-    if [[ -n "${ONPREM_VERSION}" ]]; then
-      VERSION_PARAM="--version $ONPREM_VERSION"
-    fi
-
-    echo "Fetching http://charts.codefresh.io/${REPO_CHANNEL} ${VERSION_PARAM} to ${LOCAL_CHART_PATH}" >&2
-    LOCAL_CHART_PATH=$(mktemp -d)
-    helm repo add codefresh-onprem-${REPO_CHANNEL} http://charts.codefresh.io/${REPO_CHANNEL} &>/dev/null
-    helm fetch ${CHART} ${VERSION_PARAM} -d ${LOCAL_CHART_PATH}
-else
-   echo "Using LOCAL_CHART_PATH = ${LOCAL_CHART_PATH}" >&2
-fi
+REPO_CHANNEL=${REPO_CHANNEL:-$1}
+CHART=codefresh-onprem-${REPO_CHANNEL}/codefresh
+ONPREM_VERSION=${ONPREM_VERSION:-$2}
 
 HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
 
 function getHelmReleaseImages() {
-    helm template ${LOCAL_CHART_PATH} ${VERSION_PARAM} ${HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | sort -u
+    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | sort -u
 }
 
 function getRuntimeImages() {
@@ -39,11 +27,11 @@ function getRuntimeImages() {
     )
 
     for k in ${RUNTIME_IMAGES[@]}; do
-        helm template ${LOCAL_CHART_PATH} ${VERSION_PARAM} ${HELM_VALS} | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
+        helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
     done
     
-    helm template ${LOCAL_CHART_PATH} ${VERSION_PARAM} ${HELM_VALS} | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
-    helm template ${LOCAL_CHART_PATH} ${VERSION_PARAM} ${HELM_VALS} | grep 'dindImage'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
+    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
+    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'dindImage'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
 }
 
 # default images listed here:
@@ -95,5 +83,8 @@ function getImages() {
     getOtherImages
 }
 
+LOCAL_CHART_PATH=$(mktemp -d)
+helm repo add codefresh-onprem-${REPO_CHANNEL} http://charts.codefresh.io/${REPO_CHANNEL} &>/dev/null
+helm fetch ${CHART} --version ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH}
 
 getImages | sort -u
