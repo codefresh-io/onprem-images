@@ -9,7 +9,7 @@ ONPREM_VERSION=${ONPREM_VERSION:-$2}
 HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
 
 function getHelmReleaseImages() {
-    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | sort -u
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | sort -u
 }
 
 function getRuntimeImages() {
@@ -29,11 +29,11 @@ function getRuntimeImages() {
     )
 
     for k in ${RUNTIME_IMAGES[@]}; do
-        helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
+        helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
     done
     
-    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
-    helm template ${LOCAL_CHART_PATH}/* --version ${ONPREM_VERSION} ${HELM_VALS} | grep '"dindImage"'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep '"dindImage"'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
 }
 
 function getOtherImages() {
