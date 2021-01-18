@@ -1,12 +1,40 @@
 #!/bin/bash
 
-set -eu
+set -eo pipefail
 
-REPO_CHANNEL=${REPO_CHANNEL:-$1}
+while [[ $1 =~ ^(--(repo|version|show-digests|gcr-sa)) ]]
+    do
+        key=$1
+        value=$2
+        case $key in
+            --repo)
+                REPO_CHANNEL="$value"
+                shift
+            ;;
+            --version)
+                ONPREM_VERSION="--version $value"
+                shift
+            ;;
+            --show-digests)
+                SHOW_DIGESTS="true"
+            ;;
+            --gcr-sa)
+                GCR_SA_FILE="$value"
+            ;;
+        esac
+        shift
+    done
+
+REPO_CHANNEL=${REPO_CHANNEL:-"prod"}
 CHART=codefresh-onprem-${REPO_CHANNEL}/codefresh
-ONPREM_VERSION=${ONPREM_VERSION:-$2}
+ONPREM_VERSION=${ONPREM_VERSION:-""}
+SHOW_DIGESTS=${SHOW_DIGESTS:-"false"}
+SKOPEO_IMAGE="quay.io/codefresh/skopeo"
+SKOPEO_CONTAINER="cf-skopeo"
 
 HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
+
+set -u 
 
 function getHelmReleaseImages() {
     helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | sort -u
@@ -57,8 +85,70 @@ function getImages() {
     getOtherImages
 }
 
+function getDigest() {
+   local manifest
+   local digest
+   
+   digest=$(docker exec $SKOPEO_CONTAINER skopeo inspect docker://$1 --format {{.Digest}} 2>&1)
+   if [[ "$?" == "1" ]]; then
+        echo "Error: $digest"
+        return
+   fi
+
+   echo $digest
+}
+
+function printImage() {
+    if [[ "$SHOW_DIGESTS" == "true" ]]; then
+        local digest=$(getDigest $1)
+        local space_width=$(( 80 - "$(echo $1 | wc -c)"  ))
+
+        local spacing=$(awk "BEGIN{for(c=0;c<${space_width};c++) printf \" \"}")
+        echo "$1${spacing}$digest"
+    else
+        echo "$1"
+    fi
+}
+
+function initSkopeo() {
+
+   docker run --rm -d \
+         --name ${SKOPEO_CONTAINER} \
+         --entrypoint sh \
+         -w /skopeo \
+         ${SKOPEO_IMAGE} \
+         -c 'sleep 1000'
+
+   local gcr_pass=$(cat ${GCR_SA_FILE})
+   docker exec $SKOPEO_CONTAINER skopeo login -u _json_key -p "$gcr_pass" gcr.io
+}
+
+function stopSkopeo() {
+   docker stop ${SKOPEO_CONTAINER} &> /dev/null
+}
+
+function printImages() {
+    if [[ "$SHOW_DIGESTS" == "true" ]]; then
+        trap stopSkopeo EXIT
+
+        initSkopeo 1> /dev/null
+    fi
+
+    set +e
+    local tmpfile=$(mktemp)
+    for i in $IMAGES; do
+        printImage $i >> ${tmpfile} &
+    done
+
+    wait
+
+    cat ${tmpfile} | sort
+}
+
 LOCAL_CHART_PATH=$(mktemp -d)
 helm repo add codefresh-onprem-${REPO_CHANNEL} http://charts.codefresh.io/${REPO_CHANNEL} &>/dev/null
-helm fetch ${CHART} --version ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH}
+helm fetch ${CHART} ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH}
 
-getImages | sort -u
+IMAGES=$(getImages | sort -u)
+
+printImages

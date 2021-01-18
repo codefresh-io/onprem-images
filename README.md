@@ -1,5 +1,23 @@
 # Images for Codefresh Onpremises installation
 
+## Getting images list of an on-prem release
+
+To get a simple image list (without image digests) of a lates on-prem release, use the following command:
+
+```
+./get-img-list.sh
+```
+For a specific on-prem helm repo and release version use:
+
+```
+./get-img-list.sh --repo prod --version 1.0.151
+```
+If you need image list along with their repo digests, you will require a proper GCR service account file to be able to access the private images:
+
+```
+./get-img-list.sh --repo prod --version 1.0.151 --show-digests --gcr-sa ./sa.json
+```
+
 ## Push images from Codefresh Enterprise and public repos to private repo 
 Use Case: install in non-internet environments for private repo
 
