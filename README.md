@@ -38,3 +38,8 @@ Example:
 ```
 push-to-registry.sh os-registry.cf-cd.com:5000 v1.0.90
 ```
+
+## Scan images using snyk and create local txt file with result
+```
+./get-img-list.sh | xargs -I % docker scan % > scans.txt
+```
