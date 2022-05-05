@@ -67,10 +67,8 @@ function getRuntimeImages() {
 function getOtherImages() {
     
     OTHER_IMAGES=(
-        quay.io/codefresh/cf-runtime-cleaner:1.2.0
+        quay.io/codefresh/cf-runtime-cleaner:1.3.0
         quay.io/codefresh/agent:stable
-        gcr.io/codefresh-enterprise/codefresh/cf-k8s-monitor:4.6.3
-        quay.io/codefresh/kube-helm:3.0.3
         quay.io/codefresh/hermes-store-backup:0.2.0
     )
 
