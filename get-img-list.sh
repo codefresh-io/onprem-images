@@ -101,7 +101,7 @@ function printImage() {
         local space_width=$(( 80 - "$(echo $1 | wc -c)"  ))
 
         local spacing=$(awk "BEGIN{for(c=0;c<${space_width};c++) printf \" \"}")
-        echo "$1${spacing}$digest"
+        echo "$1@$digest"
     else
         echo "$1"
     fi
