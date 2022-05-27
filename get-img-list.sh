@@ -37,7 +37,7 @@ HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
 set -u 
 
 function getHelmReleaseImages() {
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | sort -u
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
 }
 
 function getRuntimeImages() {
