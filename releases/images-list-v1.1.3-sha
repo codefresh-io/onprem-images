@@ -1,5 +1,5 @@
-bitnami/mongodb:4.2@sha256:878e8d7e4cfd40548671cfe59d5f6a254fdd2d7c2d44b99a56fb02e52bbeeeee
-bitnami/redis:6.0.16@sha256:af948168edbbf9ae8dd0787a824783e7c910bf812903fd533f525e8f85348e51
+bitnami/mongodb:4.2@sha256:482cdf2b837accc71f20ffdd9f71e09d77b1336ec6014eef0f0bcd3188423bed
+bitnami/redis:6.0.16@sha256:cba60dcf2f86bf175d6ab0a6d4eca18fa3af42e743166275beb8fbf77ae45047
 chartmuseum/chartmuseum:v0.5.2@sha256:e7e4cb81dee7ecfaf8f6eece09542c4e608e4afadd42def87a5517d1e233323b
 codefresh/hermes-store-backup:0.2.0@sha256:be5275821dd11ab77208c2f1730dd92483ab2dda56eb53b4ebe14f51a1dd2adc
 consul:1.11@sha256:b046770864f58edfa6bb58640677396a66a29efb6e193c973d7f87e15ee6f6fe
@@ -24,7 +24,7 @@ gcr.io/codefresh-enterprise/codefresh/tasker-kubernetes:1.17.3@sha256:3003fca6a1
 gcr.io/google_containers/defaultbackend:1.3@sha256:fb91f9395ddf44df1ca3adf68b25dcbc269e5d08ba14a40de9abdedafacf93d4
 k8s.gcr.io/ingress-nginx/controller:v0.51.0@sha256:df2f0bcddb9295986f019231956fb0e78788032420b15ef99d48fcf9305e8a04
 nats:2.7@sha256:3a55fa44c966259400450642b64197512a9b9144e8d995b710023c52bcbcb54f
-postgres:13@sha256:e3354da5b11f8c52eca6ae00725acf5bb0d07c17d33ceea95d706188e14a0dd5
+postgres:13@sha256:a598b8679658e155020725d41601813cc8813429494514501e7f65f031774964
 quay.io/codefresh/cf-container-logger:1.8.1@sha256:167ba97c9455be7b8943a700da116f08b2901510cd8633900d17b03543ad0194
 quay.io/codefresh/cf-debugger:1.1.2@sha256:d39086034b0b8bd654a8245fc0e4cfea5f746f1b5dd300ac718e92244ab8d5e0
 quay.io/codefresh/cf-deploy-kubernetes:16.1.8@sha256:30fda9bcdcdd2ed23326f3db75cc6400b9b4a131a94ab5fa8f738a8273f630ca
@@ -40,6 +40,5 @@ quay.io/codefresh/dind:20.10.7-1.25.0@sha256:7374f29dce957b54c33f16b0c52157db620
 quay.io/codefresh/engine:1.147.8@sha256:5c38c4f1a10674950aa43bff249f7dfc2e7bec58a9ef60ae2822d77f3348994d
 quay.io/codefresh/fs-ops:1.1.1@sha256:c218297a8c4b4267c172c121e476598fb5d58007aaf391f1c957ed1732a1f47b
 quay.io/codefresh/generate-certs:1.0.0@sha256:d31eae312fcd530fca11d2b01c5413c2bf817dfd5140422a8ec798e2b678e6f9
-quay.io/codefresh/hermes-store-backup:0.2.0@sha256:ae305f599ee1bc6eb8cb82a1dc2295a1de88adb07c7754f7dc568eefb65447dd
 quay.io/codefresh/pikolo:0.13.2@sha256:958b09cf1681112a4b417b2ca94ecd54e8d967e23661300134139d21d67e07fc
-rabbitmq:3-management@sha256:34bb8f0186cddcb4802462528c17bf5acf7a9eb70f0444407b0f6cd75a7788af
+rabbitmq:3-management@sha256:f8bc841a093d52e2cd9e690e7ff2c0d761ab611e16661a46bba2417122470a9f
