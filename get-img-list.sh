@@ -68,7 +68,6 @@ function getOtherImages() {
     
     OTHER_IMAGES=(
         quay.io/codefresh/cf-runtime-cleaner:1.3.0
-        quay.io/codefresh/hermes-store-backup:0.2.0
     )
 
     for i in ${OTHER_IMAGES[@]}; do
