@@ -27,12 +27,15 @@ while [[ $1 =~ ^(--(repo|version|show-digests|gcr-sa)) ]]
 
 REPO_CHANNEL=${REPO_CHANNEL:-"prod"}
 CHART=codefresh-onprem-${REPO_CHANNEL}/codefresh
+RUNNER_CHART=cf-runtime/cf-runtime
 ONPREM_VERSION=${ONPREM_VERSION:-""}
 SHOW_DIGESTS=${SHOW_DIGESTS:-"false"}
 SKOPEO_IMAGE="quay.io/codefresh/skopeo"
 SKOPEO_CONTAINER="cf-skopeo"
+NEW_LINE=$'\n'
 
 HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
+RUNNER_HELM_VALS="--set appProxy.enabled=true --set monitor.enabled=true"
 
 set -u 
 
@@ -73,6 +76,10 @@ function getOtherImages() {
     for i in ${OTHER_IMAGES[@]}; do
         echo $i
     done
+}
+
+function getRunnerImages() {
+    helm template ${RUNNER_LOCAL_CHART_PATH}/* ${RUNNER_HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
 }
 
 function getImages() {
@@ -150,5 +157,10 @@ fi
 helm fetch ${CHART} ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH}
 
 IMAGES=$(getImages | sort -u)
+
+RUNNER_LOCAL_CHART_PATH=$(mktemp -d)
+helm repo add cf-runtime https://chartmuseum.codefresh.io/cf-runtime &>/dev/null
+helm fetch ${RUNNER_CHART} -d ${RUNNER_LOCAL_CHART_PATH}
+IMAGES+=$NEW_LINE$(getRunnerImages | sort -u)
 
 printImages
