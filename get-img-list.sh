@@ -40,7 +40,7 @@ RUNNER_HELM_VALS="--set appProxy.enabled=true --set monitor.enabled=true"
 set -u
 
 function getHelmReleaseImages() {
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --api-versions 1.22 | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
 }
 
 function getRuntimeImages() {
@@ -60,11 +60,11 @@ function getRuntimeImages() {
     )
 
     for k in ${RUNTIME_IMAGES[@]}; do
-        helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --api-versions 1.22 | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
+        helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
     done
 
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --api-versions 1.22 | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --api-versions 1.22 | grep '"dindImage"'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep '"dindImage"'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
 }
 
 function getOtherImages() {
@@ -79,7 +79,7 @@ function getOtherImages() {
 }
 
 function getRunnerImages() {
-    helm template ${RUNNER_LOCAL_CHART_PATH}/* ${RUNNER_HELM_VALS} --api-versions 1.22 | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
+    helm template ${RUNNER_LOCAL_CHART_PATH}/* ${RUNNER_HELM_VALS} --disable-openapi-validation | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
 }
 
 function getImages() {
