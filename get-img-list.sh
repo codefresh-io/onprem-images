@@ -37,10 +37,10 @@ NEW_LINE=$'\n'
 HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
 RUNNER_HELM_VALS="--set appProxy.enabled=true --set monitor.enabled=true"
 
-set -u 
+set -u
 
 function getHelmReleaseImages() {
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
 }
 
 function getRuntimeImages() {
@@ -60,15 +60,15 @@ function getRuntimeImages() {
     )
 
     for k in ${RUNTIME_IMAGES[@]}; do
-        helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
+        helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
     done
-    
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} | grep '"dindImage"'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
+
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
+    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep '"dindImage"'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
 }
 
 function getOtherImages() {
-    
+
     OTHER_IMAGES=(
         quay.io/codefresh/cf-runtime-cleaner:1.3.0
     )
@@ -79,7 +79,7 @@ function getOtherImages() {
 }
 
 function getRunnerImages() {
-    helm template ${RUNNER_LOCAL_CHART_PATH}/* ${RUNNER_HELM_VALS} | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
+    helm template ${RUNNER_LOCAL_CHART_PATH}/* ${RUNNER_HELM_VALS} --disable-openapi-validation | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
 }
 
 function getImages() {
@@ -91,7 +91,7 @@ function getImages() {
 function getDigest() {
    local manifest
    local digest
-   
+
    digest=$(docker exec $SKOPEO_CONTAINER skopeo inspect docker://$1 --format {{.Digest}} 2>&1)
    if [[ "$?" == "1" ]]; then
         echo "Error: $digest"
