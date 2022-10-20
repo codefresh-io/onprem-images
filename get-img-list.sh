@@ -70,7 +70,7 @@ function getRuntimeImages() {
 function getOtherImages() {
 
     OTHER_IMAGES=(
-        quay.io/codefresh/cf-runtime-cleaner:1.3.0
+        quay.io/codefresh/cf-runtime-cleaner:latest
     )
 
     for i in ${OTHER_IMAGES[@]}; do
