@@ -94,7 +94,7 @@ function getImages() {
     outputValues
     getHelmReleaseImages
     getRuntimeImages
-    #getOtherImages
+    getOtherImages
 }
 
 function getDigest() {
