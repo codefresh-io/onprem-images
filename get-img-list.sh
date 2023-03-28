@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -eo pipefail
-
 while [[ $1 =~ ^(--(repo|version|show-digests|gcr-sa)) ]]
     do
         key=$1
@@ -25,8 +23,11 @@ while [[ $1 =~ ^(--(repo|version|show-digests|gcr-sa)) ]]
         shift
     done
 
+set -eou pipefail
+
 REPO_CHANNEL=${REPO_CHANNEL:-"prod"}
 CHART=codefresh-onprem-${REPO_CHANNEL}/codefresh
+ONPREM_CHART_NAME=codefresh
 RUNNER_CHART=cf-runtime/cf-runtime
 ONPREM_VERSION=${ONPREM_VERSION:-""}
 SHOW_DIGESTS=${SHOW_DIGESTS:-"false"}
@@ -37,15 +38,26 @@ NEW_LINE=$'\n'
 HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
 RUNNER_HELM_VALS="--set appProxy.enabled=true --set monitor.enabled=true"
 
-set -u
+ALL_VALUES_TEMPLATE=$(cat <<-END
+{{ .Values | toYaml }}
+END
+)
+
+function outputValues() {
+    echo $ALL_VALUES_TEMPLATE > $LOCAL_CHART_PATH/$ONPREM_CHART_NAME/templates/all-values.yaml
+    helm template --show-only templates/all-values.yaml $LOCAL_CHART_PATH/$ONPREM_CHART_NAME > $LOCAL_CHART_PATH/output-values.yaml
+    rm $LOCAL_CHART_PATH/$ONPREM_CHART_NAME/templates/all-values.yaml
+}
 
 function getHelmReleaseImages() {
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
+    helm template $LOCAL_CHART_PATH/$ONPREM_CHART_NAME ${HELM_VALS} --disable-openapi-validation | grep -E 'image:' | awk -F ': ' '{print $2}' | tr -d '"' | tr -d ',' | cut -f1 -d"@" | sort -u
 }
 
 function getRuntimeImages() {
 
     RUNTIME_IMAGES=(
+        ENGINE_IMAGE
+        DIND_IMAGE
         CONTAINER_LOGGER_IMAGE
         DOCKER_PUSHER_IMAGE
         DOCKER_TAG_PUSHER_IMAGE
@@ -59,16 +71,12 @@ function getRuntimeImages() {
         PIPELINE_DEBUGGER_IMAGE
     )
 
-    for k in ${RUNTIME_IMAGES[@]}; do
-        helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep "$k" | tr -d '"' | tr -d ',' | awk -F "$k: " '{print $2}' | sort -u
-    done
-
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep 'engine:' | tr -d '"' | tr -d ',' | awk -F 'image: ' '{print $2}'| sort -u # engine image
-    helm template ${LOCAL_CHART_PATH}/* ${HELM_VALS} --disable-openapi-validation | grep '"dindImage"'  | tr -d '"' | tr -d ',' | awk -F ' ' '{print $2}' | sort -u # dind image
+    cat $LOCAL_CHART_PATH/output-values.yaml | grep -E "$(printf '%s|' "${RUNTIME_IMAGES[@]}" | sed 's/|$//')" | tr -d '"' | tr -d ',' | awk -F ": " '{print $2}' | sort -u
 }
 
 function getOtherImages() {
 
+    # Legacy image
     OTHER_IMAGES=(
         quay.io/codefresh/cf-runtime-cleaner:latest
     )
@@ -78,14 +86,15 @@ function getOtherImages() {
     done
 }
 
-function getRunnerImages() {
-    helm template ${RUNNER_LOCAL_CHART_PATH}/* ${RUNNER_HELM_VALS} --disable-openapi-validation | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
-}
+# function getRunnerImages() {
+#     helm template ${RUNNER_LOCAL_CHART_PATH}/* ${RUNNER_HELM_VALS} --disable-openapi-validation | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
+# }
 
 function getImages() {
+    outputValues
     getHelmReleaseImages
     getRuntimeImages
-    getOtherImages
+    #getOtherImages
 }
 
 function getDigest() {
@@ -154,13 +163,13 @@ if [[ "$REPO_CHANNEL" == "dev" ]]; then
 elif [[ "$REPO_CHANNEL" == "prod" ]]; then
     helm repo add codefresh-onprem-${REPO_CHANNEL} https://chartmuseum.codefresh.io/codefresh &>/dev/null
 fi
-helm fetch ${CHART} ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH}
+helm pull ${CHART} ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH} --untar
 
 IMAGES=$(getImages | sort -u)
 
-RUNNER_LOCAL_CHART_PATH=$(mktemp -d)
-helm repo add cf-runtime https://chartmuseum.codefresh.io/cf-runtime &>/dev/null
-helm fetch ${RUNNER_CHART} -d ${RUNNER_LOCAL_CHART_PATH}
-IMAGES+=$NEW_LINE$(getRunnerImages | sort -u)
+# RUNNER_LOCAL_CHART_PATH=$(mktemp -d)
+# helm repo add cf-runtime https://chartmuseum.codefresh.io/cf-runtime &>/dev/null
+# helm fetch ${RUNNER_CHART} -d ${RUNNER_LOCAL_CHART_PATH}
+# IMAGES+=$NEW_LINE$(getRunnerImages | sort -u)
 
 printImages
