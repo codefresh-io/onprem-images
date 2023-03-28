@@ -1,5 +1,8 @@
 # Images for Codefresh Onpremises installation
 
+
+
+
 ## Getting images list of an on-prem release
 
 To get a simple image list (without image digests) of a lates on-prem release, use the following command:
@@ -18,7 +21,7 @@ If you need image list along with their repo digests, you will require a proper 
 ./get-img-list.sh --repo prod --version 1.0.151 --show-digests --gcr-sa ./sa.json
 ```
 
-## Push images from Codefresh Enterprise and public repos to private repo 
+## Push images from Codefresh Enterprise and public repos to private repo
 Use Case: install in non-internet environments for private repo
 
 ### Prerequesites:
@@ -37,9 +40,4 @@ push-to-registry.sh <private-registry-addr> <release-name>
 Example:
 ```
 push-to-registry.sh os-registry.cf-cd.com:5000 v1.0.90
-```
-
-## Scan images using snyk and create local txt file with result
-```
-./get-img-list.sh | xargs -I % docker scan % > scans.txt
 ```
