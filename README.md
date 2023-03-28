@@ -1,7 +1,7 @@
 # Images for Codefresh Onpremises installation
 
-
-
+- `pre-release/*` folder contains images lists for each dev onprem chart
+- `releases/*` folder contains images lists for each prod onprem chart
 
 ## Getting images list of an on-prem release
 
