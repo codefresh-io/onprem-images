@@ -3,7 +3,7 @@
 usage() {
   echo "Usage:
   $0 <private-registry-addr> <release-name>
-  
+
   Prerequisite: docker login to both source and destination registry
   "
 }
@@ -26,7 +26,7 @@ if [[ ! -f "${IMAGES_LIST}" ]]; then
 fi
 
 JOURNAL_DIR=${JOURNAL_DIR:-$DIR/log/$(date "+%Y-%m-%d_%H%M%S")}
-mkdir -p $JOURNAL_DIR 
+mkdir -p $JOURNAL_DIR
 DONE_FILE=$JOURNAL_DIR/done
 ERRORS_FILE=$JOURNAL_DIR/errors
 
@@ -57,7 +57,7 @@ do
   [[ -z $line ]] && continue
   PULL_IMAGE=$(echo $line)
   PUSH_IMAGE=$(echo $PULL_IMAGE | awk -F"${DELIMITER}|${DELIMITER_INC}" -vPRIVATE_REGISTRY_ADDR=${PRIVATE_REGISTRY_ADDR} \
-      '{if($2 == ""){print PRIVATE_REGISTRY_ADDR"/"$1}  else {print PRIVATE_REGISTRY_ADDR"/codefresh/"$2}}' | sed -E -e "s#docker.io\/|k8s.gcr.io\/|ghcr.io\/##")
+      '{if($2 == ""){print PRIVATE_REGISTRY_ADDR"/"$1}  else {print PRIVATE_REGISTRY_ADDR"/codefresh/"$2}}' | sed -E -e "s#docker.io\/|registry.k8s.io\/|k8s.gcr.io\/|ghcr.io\/##")
   echo "$PULL_IMAGE    ->    $PUSH_IMAGE "
 
   PULL_COMMAND="$DOCKER pull $PULL_IMAGE"
