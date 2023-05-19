@@ -74,18 +74,6 @@ function getRuntimeImages() {
     cat $LOCAL_CHART_PATH/output-values.yaml | grep -E "$(printf '%s|' "${RUNTIME_IMAGES[@]}" | sed 's/|$//')" | tr -d '"' | tr -d ',' | awk -F ": " '{print $2}' | sort -u
 }
 
-function getOtherImages() {
-
-    # Legacy image
-    OTHER_IMAGES=(
-        quay.io/codefresh/cf-runtime-cleaner:latest
-    )
-
-    for i in ${OTHER_IMAGES[@]}; do
-        echo $i
-    done
-}
-
 # function getRunnerImages() {
 #     helm template ${RUNNER_LOCAL_CHART_PATH}/* ${RUNNER_HELM_VALS} --disable-openapi-validation | grep 'image:' | awk -F 'image: ' '{print $2}' | tr -d '"' | cut -f1 -d"@" | sort -u
 # }
