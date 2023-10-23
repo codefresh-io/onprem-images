@@ -146,11 +146,10 @@ function printImages() {
 
 LOCAL_CHART_PATH=$(mktemp -d)
 if [[ "$REPO_CHANNEL" == "dev" ]]; then
-    helm repo add codefresh-onprem-${REPO_CHANNEL} https://chartmuseum-dev.codefresh.io/codefresh &>/dev/null
+    helm pull oci://quay.io/codefresh/dev/codefresh ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH} --untar
 elif [[ "$REPO_CHANNEL" == "prod" ]]; then
-    helm repo add codefresh-onprem-${REPO_CHANNEL} https://chartmuseum.codefresh.io/codefresh &>/dev/null
+    helm pull oci://quay.io/codefresh/codefresh ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH} --untar
 fi
-helm pull ${CHART} ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH} --untar
 
 IMAGES=$(getImages | sort -u)
 
