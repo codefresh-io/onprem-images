@@ -146,9 +146,9 @@ function printImages() {
 
 LOCAL_CHART_PATH=$(mktemp -d)
 if [[ "$REPO_CHANNEL" == "dev" ]]; then
-    helm pull oci://quay.io/codefresh/dev/codefresh ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH} --untar
+    helm pull oci://quay.io/codefresh/dev/codefresh ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH} --untar &> /dev/null
 elif [[ "$REPO_CHANNEL" == "prod" ]]; then
-    helm pull oci://quay.io/codefresh/codefresh ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH} --untar
+    helm pull oci://quay.io/codefresh/codefresh ${ONPREM_VERSION} -d ${LOCAL_CHART_PATH} --untar &> /dev/null
 fi
 
 IMAGES=$(getImages | sort -u)
