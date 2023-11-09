@@ -35,7 +35,7 @@ SKOPEO_IMAGE="quay.io/codefresh/skopeo"
 SKOPEO_CONTAINER="cf-skopeo"
 NEW_LINE=$'\n'
 
-HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true"
+HELM_VALS="--set global.seedJobs=true --set global.certsJobs=true --set cf-oidc-provider.enabled=true"
 RUNNER_HELM_VALS="--set appProxy.enabled=true --set monitor.enabled=true"
 
 ALL_VALUES_TEMPLATE=$(cat <<-END
