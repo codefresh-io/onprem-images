@@ -69,6 +69,8 @@ function getRuntimeImages() {
         FS_OPS_IMAGE
         TEMPLATE_ENGINE
         PIPELINE_DEBUGGER_IMAGE
+        CR_6177_FIXER
+        GC_BUILDER_IMAGE
     )
 
     cat $LOCAL_CHART_PATH/output-values.yaml | grep -E "$(printf '%s|' "${RUNTIME_IMAGES[@]}" | sed 's/|$//')" | tr -d '"' | tr -d ',' | awk -F ": " '{print $2}' | sort -u
