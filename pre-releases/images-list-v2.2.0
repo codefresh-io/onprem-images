@@ -5,7 +5,7 @@ docker.io/bitnami/nats:2.10.6-debian-11-r0
 docker.io/bitnami/rabbitmq:3.12.10-debian-11-r1
 docker.io/bitnami/redis:7.2.2-debian-11-r0
 docker.io/bitnami/redis:7.2.3-debian-11-r1
-docker.io/docker:24.0-dind
+docker.io/docker:25-rc-dind
 docker.io/nginxinc/nginx-unprivileged:1.25-alpine
 gcr.io/codefresh-enterprise/codefresh-io/argo-hub-platform:0.1.8
 gcr.io/codefresh-enterprise/codefresh-io/argo-platform-abac:1.2577.0
