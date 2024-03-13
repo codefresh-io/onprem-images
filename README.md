@@ -27,6 +27,8 @@ Use Case: install in non-internet environments for private repo
 ### Prerequesites:
 setup docker and `docker login to both source and destination registries`
 
+Install [regctl](https://github.com/regclient/regclient)
+
 to login with obtained Google Service Accounbt for Codefresh Enterprise registery:
 ```
 docker login -u _json_key -p "$(cat sa.json)" https://gcr.io

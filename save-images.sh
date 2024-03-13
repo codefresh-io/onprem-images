@@ -3,8 +3,8 @@
 usage() {
   echo "Usage:
   $0 <private-registry-addr> <release-name>
-  
-  Prerequisite: docker login to both source and destination registry
+
+  Prerequisite: docker login to both source and destination registry.
   "
 }
 
@@ -50,7 +50,7 @@ do
 done < $IMAGES_LIST
 
 echo "Save List = $SAVE_LIST"
-$DOCKER save -o $SAVE_FILE $SAVE_LIST 
+$DOCKER save -o $SAVE_FILE $SAVE_LIST
 
 echo "Completed at $(date) "
 

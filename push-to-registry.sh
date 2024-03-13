@@ -4,7 +4,7 @@ usage() {
   echo "Usage:
   $0 <private-registry-addr> <release-name>
 
-  Prerequisite: docker login to both source and destination registry
+  Prerequisite: docker login to both source and destination registry. Regctl tool is installed.
   "
 }
 
@@ -32,9 +32,9 @@ ERRORS_FILE=$JOURNAL_DIR/errors
 
 if [[ -n "${DRY_RUN}" ]]; then
   echo "DRY_RUN MODE"
-  DOCKER="echo docker"
+  REGCTL="echo regctl"
 else
-  DOCKER="docker"
+  REGCTL="regctl"
 fi
 
 echo "Starting at $(date)"
@@ -55,25 +55,21 @@ DELIMITER_INC='codefresh-io/'
 while read line
 do
   [[ -z $line ]] && continue
-  PULL_IMAGE=$(echo $line)
-  PUSH_IMAGE=$(echo $PULL_IMAGE | awk -F"${DELIMITER}|${DELIMITER_INC}" -vPRIVATE_REGISTRY_ADDR=${PRIVATE_REGISTRY_ADDR} \
+  SRC_IMAGE=$(echo $line)
+  DEST_IMAGE=$(echo $SRC_IMAGE | awk -F"${DELIMITER}|${DELIMITER_INC}" -vPRIVATE_REGISTRY_ADDR=${PRIVATE_REGISTRY_ADDR} \
       '{if($2 == ""){print PRIVATE_REGISTRY_ADDR"/"$1}  else {print PRIVATE_REGISTRY_ADDR"/codefresh/"$2}}' | sed -E -e "s#docker.io\/|registry.k8s.io\/|k8s.gcr.io\/|ghcr.io\/##")
-  echo "$PULL_IMAGE    ->    $PUSH_IMAGE "
+  echo "$SRC_IMAGE    ->    $DEST_IMAGE"
 
-  PULL_COMMAND="$DOCKER pull $PULL_IMAGE"
-  TAG_COMMAND="$DOCKER tag $PULL_IMAGE $PUSH_IMAGE"
-  PUSH_COMMAND="$DOCKER push $PUSH_IMAGE"
+  REGCTL_COPY_COMMAND="$REGCTL image copy $SRC_IMAGE $DEST_IMAGE"
 
-  echo "---------- Migrate $PULL_IMAGE to $PUSH_IMAGE"
-  eval $PULL_COMMAND && echo -e "Pull $PULL_IMAGE completed - $(date) !!!\n" && \
-  eval $TAG_COMMAND && echo -e "Tag $PUSH_IMAGE completed - $(date) !!!\n" && \
-  eval $PUSH_COMMAND && echo -e "Push $PUSH_IMAGE completed - $(date) !!!\n"
+  echo "---------- Copy $SRC_IMAGE to $DEST_IMAGE"
+  eval $REGCTL_COPY_COMMAND && echo -e "Copy $DEST_IMAGE completed - $(date) !!!\n" && \
 
   if [[ $? == 0 ]]; then
-    echo "$PUSH_IMAGE" >> $DONE_FILE
+    echo "$DEST_IMAGE" >> $DONE_FILE
     DONE_COUNT=$(( DONE_COUNT+1 ))
   else
-    echo "ERROR - $PULL_IMAGE to $PUSH_IMAGE" >> $ERRORS_FILE
+    echo "ERROR - $PULL_IMAGE to $DEST_IMAGE" >> $ERRORS_FILE
     ERROR_COUNT=$(( ERROR_COUNT+1 ))
   fi
 
