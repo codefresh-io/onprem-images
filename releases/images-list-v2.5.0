@@ -44,7 +44,7 @@ us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-oidc-provider:0.0.15
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-platform-analytics:0.49.59
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-tls-sign:1.8.2
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-ui:14.95.75
-us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/charts-manager:1.17.2
+us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/charts-manager:1.18.1
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cluster-providers:1.17.7
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/context-manager:2.30.1
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cronus:0.8.6
