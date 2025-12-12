@@ -22,7 +22,7 @@ us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/argo-platform-ui:1.3750.
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-api:21.291.22-onprem-759dadf
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-broadcaster:1.14.3-2.9-onprem-592a35e
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-oidc-provider:0.1.0
-us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-platform-analytics:0.51.2-onprem-9ebeb58
+us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-platform-analytics:0.51.3-onprem-27a92a8
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-tls-sign:1.8.11-onprem-1aece39
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/cf-ui:14.99.39
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/charts-manager:1.25.3-2.9-onprem-ff2738e
@@ -33,7 +33,7 @@ us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/gitops-dashboard-manager
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/helm-repo-manager:0.23.1-onprem-ec77e8c
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/hermes:0.21.22
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/k8s-monitor:4.11.18-2.9-onprem-8587e92
-us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/kube-integration:1.32.3-2.9-onprem-e2516d0
+us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/kube-integration:1.32.4-2.9-onprem-8d5d282
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/nomios:0.11.12
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/pipeline-manager:3.141.3-2.9-onprem-f2a2047
 us-docker.pkg.dev/codefresh-enterprise/gcr.io/codefresh/runtime-environment-manager:3.43.7-2.9-onprem-6acc833
